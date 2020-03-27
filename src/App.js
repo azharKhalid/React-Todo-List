@@ -9,37 +9,63 @@ import TodoList from "./components/TodoList";
 
 class App extends Component {
   state = {
-    items: [
-      { id: 1, title: "Wake Up" },
-      { id: 2, title: "Make breakfast" }
-    ],
+    items: [],
     id: uuidv4(),
     item: "",
     editItem: false
   };
 
   handleChange = e => {
-    console.log("handle Change");
+    this.setState({
+      item: e.target.value
+    });
   };
 
   handleSubmit = e => {
-    console.log("handle Submit");
+    e.preventDefault();
+    const newItem = {
+      id: this.state.id,
+      title: this.state.item
+    };
+
+    const updatedItems = [...this.state.items, newItem];
+
+    this.setState(
+      {
+        items: updatedItems,
+        item: "",
+        id: uuidv4(),
+        editItem: false
+      },
+      () => console.log(this.state)
+    );
   };
 
   clearList = () => {
-    console.log("Clear List");
+    this.setState({
+      items: []
+    });
   };
 
   handleDelete = id => {
-    console.log(`handle edit ${id}`);
+    const filteredItems = this.state.items.filter(item => item.id !== id);
+    this.setState({
+      items: filteredItems
+    });
   };
 
   handleEdit = id => {
-    console.log(`edit edit ${id}`);
+    const filteredItems = this.state.items.filter(item => item.id !== id);
+    const selectedItem = this.state.item.find(item => item.id === id);
+    this.setState({
+      items: filteredItems,
+      item: selectedItem.title,
+      id: id,
+      editItem: true
+    });
   };
 
   render() {
-    console.log(this.state);
     return (
       <div>
         <div className="container">
